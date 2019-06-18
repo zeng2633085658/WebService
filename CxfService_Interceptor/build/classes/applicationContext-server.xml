@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+                    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+                    http://www.springframework.org/schema/context   
+                    http://www.springframework.org/schema/context/spring-context-3.0.xsd
+                    http://cxf.apache.org/jaxws  
+                    http://cxf.apache.org/schemas/jaxws.xsd">
+   <!-- 配置要暴露的类，访问地址是：http://ip：端口/项目名称/services/hellows-->
+   <jaxws:endpoint 
+     id="helloWS" 
+     implementor="gz.ht.service.HelloServiceImpl" 
+     address="/hellows">
+      <!-- 添加入cxf拦截器 -->  
+        <jaxws:inInterceptors>  
+            <ref bean="loggingInInterceptor"/>  
+            <ref bean="checkUserInterceptor"/>  
+        </jaxws:inInterceptors>  
+        <!-- 添加出cxf拦截器 -->  
+        <jaxws:outInterceptors>  
+           <ref bean="loggingOutInterceptor"/>  
+        </jaxws:outInterceptors>  
+    </jaxws:endpoint>  
+    <!-- 自定义cxf拦截器 -->  
+    <bean id="checkUserInterceptor"  class="gz.ht.interceptor.CheckUserInterceptor"/>  
+     <!-- 添加cxf日志入拦截器  -->  
+    <bean id="loggingInInterceptor"  class="org.apache.cxf.interceptor.LoggingInInterceptor"/>   
+    <!-- 添加cxf日志出拦截器  -->  
+     <bean id="loggingOutInterceptor" class="org.apache.cxf.interceptor.LoggingOutInterceptor"/>  
+</beans>

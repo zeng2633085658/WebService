@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+                    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+                    http://www.springframework.org/schema/context   
+                    http://www.springframework.org/schema/context/spring-context-3.0.xsd
+                    http://cxf.apache.org/jaxws  
+                    http://cxf.apache.org/schemas/jaxws.xsd">
+    <!-- CXF webservices 客户端配置 ，指定要访问web service服务器端-->  
+    <jaxws:client id="helloClient" serviceClass="gz.ht.service.IHelloService"   
+            address="http://localhost:8080/CxfService_Interceptor/services/hellows">  
+    	  <jaxws:outInterceptors>  
+            <!-- 添加cxf日志出拦截器  -->  
+            <bean class="org.apache.cxf.interceptor.LoggingOutInterceptor"/>  
+            <!-- 添加自定义cxf拦截器 -->  
+            <bean class="gz.ht.Interceptor.HelloInterceptor"> 
+            	<!-- 对应构造方法，给参数赋值 --> 
+                <constructor-arg index="0" value="xiaoming"></constructor-arg>  
+                <constructor-arg index="1" value="123456"></constructor-arg>  
+            </bean>  
+        </jaxws:outInterceptors>  
+          
+        <jaxws:inInterceptors>  
+            <!-- 添加cxf日志入拦截器  -->  
+            <bean class="org.apache.cxf.interceptor.LoggingInInterceptor"/>   
+        </jaxws:inInterceptors>
+    </jaxws:client>  
+</beans> 
